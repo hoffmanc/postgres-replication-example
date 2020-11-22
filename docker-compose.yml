@@ -3,7 +3,7 @@ services:
   nuc:
     build: 
       context: .
-      dockerfile: Dockerfile.nuc
+      dockerfile: Dockerfile
     command: /nucstart.sh
     environment:
       POSTGRES_PASSWORD: passy 
@@ -12,9 +12,27 @@ services:
       - ./nuc.conf:/etc/postgresql/postgresql.conf
       - ./nucstart.sh:/nucstart.sh
       - ./service-account-creds.json:/creds.json
-    expose:
-      - "5432"
+    # expose:
+    #   - "5432"
     ports:
       - "9999:5432"
+  cloud:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: /nucstart.sh
+    environment:
+      POSTGRES_PASSWORD: passy 
+    volumes:
+      - cloud:/var/lib/postgresql/data
+      - ./cloud.conf:/etc/postgresql/postgresql.conf
+      # - ./standby.signal:/var/lib/postgresql/data/standby.signal
+      - ./nucstart.sh:/nucstart.sh
+      - ./service-account-creds.json:/creds.json
+    # expose:
+    #   - "5432"
+    ports:
+      - "8888:5432"
 volumes:
   nuc:
+  cloud:
