@@ -12,7 +12,7 @@ services:
       - ./nuc/postgresql.conf:/etc/postgresql/postgresql.conf
       - ./nuc:/nuc
       - initialbackup:/initialbackup
-      - nucbackup:/backup
+      - nucbackup:/nucbackup
     ports:
       - "9999:5432"
   cloud:
@@ -20,11 +20,24 @@ services:
     volumes:
       - initialbackup:/var/lib/postgresql/data
       - ./cloud/postgresql.conf:/etc/postgresql/postgresql.conf
-      - nucbackup:/backup
+      - nucbackup:/nucbackup
+      - cloudbackup:/cloudbackup
     ports:
       - "8888:5432"
+    expose:
+      - '5432'
+  subscriber:
+    volumes:
+      - subscriber:/var/lib/postgresql/data
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: passy 
+    ports:
+      - "7777:5432"
 volumes:
   nuc:
   nucbackup:
   cloud:
   initialbackup:
+  subscriber:
+  cloudbackup:

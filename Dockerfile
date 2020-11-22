@@ -1,13 +1,7 @@
 FROM postgres:13
 
-RUN apt-get update && apt-get install -y \
-  python \
-  curl \
-  && rm -rf /var/lib/apt/lists/*
+RUN mkdir /nucbackup \
+  && chown postgres:postgres /nucbackup
 
-RUN curl -sSL https://sdk.cloud.google.com > /gcinstall.sh \
-  && bash /gcinstall.sh --install-dir=/ \
-  && rm /gcinstall.sh
-
-RUN mkdir /backup
-RUN chown postgres:postgres /backup
+RUN mkdir /cloudbackup \
+  && chown postgres:postgres /cloudbackup
