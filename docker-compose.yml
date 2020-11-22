@@ -1,14 +1,20 @@
 version: '3'
 services:
   nuc:
-    image: postgres:13
-    command: -c config_file=/etc/postgresql/postgresql.conf
+    build: 
+      context: .
+      dockerfile: Dockerfile.nuc
+    command: /nucstart.sh
     environment:
       POSTGRES_PASSWORD: passy 
     volumes:
       - nuc:/var/lib/postgresql/data
       - ./nuc.conf:/etc/postgresql/postgresql.conf
+      - ./nucstart.sh:/nucstart.sh
+      - ./service-account-creds.json:/creds.json
     expose:
       - "5432"
+    ports:
+      - "9999:5432"
 volumes:
   nuc:
