@@ -4,9 +4,7 @@
 
 createdb -U postgres foo
 
-echo 'create table bar (id serial primary key, name text);' | psql -U postgres foo
-
-for i in `seq 1 100`
-do
-  echo "insert into bar (name) values ('qux $i');" | psql -U postgres foo
-done
+psql -U postgres foo <<- SQL
+create table bar (id serial primary key, name text);
+INSERT INTO bar (name) SELECT repeat('hoff'||i, 10000) FROM generate_series(1,10000) i;
+SQL

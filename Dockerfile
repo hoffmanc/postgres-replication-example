@@ -9,3 +9,5 @@ RUN curl -sSL https://sdk.cloud.google.com > /gcinstall.sh \
   && bash /gcinstall.sh --install-dir=/ \
   && rm /gcinstall.sh
 
+RUN mkdir /backup
+RUN chown postgres:postgres /backup

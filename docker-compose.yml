@@ -4,26 +4,27 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    command: /nuc/start.sh
+    command: -c config_file=/etc/postgresql/postgresql.conf
     environment:
       POSTGRES_PASSWORD: passy 
     volumes:
       - nuc:/var/lib/postgresql/data
       - ./nuc/postgresql.conf:/etc/postgresql/postgresql.conf
       - ./nuc:/nuc
-      - ./service-account-creds.json:/creds.json
+      - initialbackup:/initialbackup
       - nucbackup:/backup
     ports:
       - "9999:5432"
   cloud:
     <<: *nuc
     volumes:
+      - initialbackup:/var/lib/postgresql/data
       - ./cloud/postgresql.conf:/etc/postgresql/postgresql.conf
-      - ./nuc:/nuc
-      - ./service-account-creds.json:/creds.json
-      - nucbackup:/var/lib/postgresql/data
+      - nucbackup:/backup
     ports:
       - "8888:5432"
 volumes:
   nuc:
   nucbackup:
+  cloud:
+  initialbackup:
